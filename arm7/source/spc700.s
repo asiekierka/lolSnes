@@ -283,7 +283,7 @@ OpTableStart:
 itercount:
 	.long 0
 
-SPC_Reset:
+EXPORT(SPC_Reset)
 	stmdb sp!, {r3-r11, lr}
 
 	bl SPC_InitMisc
@@ -314,7 +314,7 @@ SPC_Reset:
 @ --- Main loop ---------------------------------------------------------------
 @ Synchronizes with main CPU once per frame
 	
-SPC_Run:
+EXPORT(SPC_Run)
 	LoadRegs
 	mov r0, #0
 	stmdb sp!, {r0}

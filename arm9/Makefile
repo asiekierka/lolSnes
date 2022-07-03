@@ -23,7 +23,7 @@ DATA		:=
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-ARCH	:=	#-marm -mthumb-interwork
+ARCH	:=	-marm -mthumb-interwork
 
 CFLAGS	:=	-g -Wall -O3\
  			-march=armv5te -mtune=arm946e-s -fomit-frame-pointer\

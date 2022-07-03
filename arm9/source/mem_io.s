@@ -29,7 +29,7 @@
 .global Mem_IOWrite8
 .global Mem_IOWrite16
 
-Mem_IORead8:
+EXPORT(Mem_IORead8)
 	and r1, r0, #0xFF00
 	and r0, r0, #0xFF
 	
@@ -49,7 +49,7 @@ Mem_IORead8:
 	mov r0, #0
 	bx lr
 	
-Mem_IORead16:
+EXPORT(Mem_IORead16)
 	and r1, r0, #0xFF00
 	and r0, r0, #0xFF
 	
@@ -69,7 +69,7 @@ Mem_IORead16:
 	mov r0, #0
 	bx lr
 	
-Mem_IOWrite8:
+EXPORT(Mem_IOWrite8)
 	and r2, r0, #0xFF00
 	and r0, r0, #0xFF
 	
@@ -92,7 +92,7 @@ Mem_IOWrite8:
 	orreq snesP, snesP, #flagI2	
 	b Mem_GIOWrite8
 	
-Mem_IOWrite16:
+EXPORT(Mem_IOWrite16)
 	and r2, r0, #0xFF00
 	and r0, r0, #0xFF
 	

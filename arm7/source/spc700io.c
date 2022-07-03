@@ -17,10 +17,9 @@
 */
 
 #include <nds.h>
-
+#define asm(x)
 #include "spc700.h"
 #include "dsp.h"
-
 
 struct SPC_TimersStruct
 {

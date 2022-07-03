@@ -83,4 +83,8 @@ void DSP_Mix();
 u8 DSP_Read(u8 reg);
 void DSP_Write(u8 reg, u8 val);
 
+#define	EXPORT(func) \
+		.global func;\
+		.type func,% function;\
+		func:
 #endif

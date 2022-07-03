@@ -605,7 +605,7 @@ OpTableStart:
 .endm
 
 
-CPU_Reset:
+EXPORT(CPU_Reset)
 	stmdb sp!, {r3-r12, lr}
 	bl Mem_Reset
 	
@@ -614,7 +614,7 @@ CPU_Reset:
 	mov snesY, #0
 	ldr snesS, =0x01FF0000	@ also PBR
 	mov snesD, #0			@ also DBR
-	ldr snesP, =0x00000534	@ we'll do PC later
+	ldr snesP, =0x00000534	@ we`ll do PC later
 	
 	ldr memoryMap, =Mem_PtrTable
 	ldr memoryMap, [memoryMap]
@@ -635,7 +635,7 @@ CPU_Reset:
 	ldmia sp!, {r3-r12, lr}
 	bx lr
 	
-CPU_TriggerIRQ:
+EXPORT(CPU_TriggerIRQ)
 	bic r3, snesS, #0x18000000
 	ldr r3, [memoryMap, r3, lsr #0x1B]
 	mov r2, snesS, lsl #0x3
@@ -669,7 +669,7 @@ irq_nostack:
 	SetPC
 	b irq_end
 	
-CPU_TriggerNMI:
+EXPORT(CPU_TriggerNMI)
 	bic r3, snesS, #0x18000000
 	ldr r3, [memoryMap, r3, lsr #0x1B]
 	mov r2, snesS, lsl #0x3
@@ -704,13 +704,13 @@ nmi_nostack:
 	b newline
 	
 .global CPU_GetPC
-CPU_GetPC:
+EXPORT(CPU_GetPC)
 	mov r0, snesPC, lsr #0x10
 	orr r0, r0, snesPBR, lsl #0x10
 	bx lr
 	
 .global CPU_GetReg
-CPU_GetReg:
+EXPORT(CPU_GetReg)
 	cmp r0, #0xC
 	moveq r0, snesA
 	bxeq lr
@@ -728,7 +728,7 @@ CPU_GetReg:
 CPU_Cycles:
 	.long 0
 	
-CPU_Run:
+EXPORT(CPU_Run)
 	LoadRegs
 
 frameloop:
@@ -888,7 +888,7 @@ vblank_notfirst:
 	
 @ --- Addressing modes --------------------------------------------------------
 @ TODO: indexed addressing modes must add one cycle if adding index crosses a
-@ page boundary (haven't yet figured out a fast way to handle it)
+@ page boundary (haven`t yet figured out a fast way to handle it)
 
 .macro _DoPrefetch sixteen
 	.ifeq \sixteen-16
@@ -4047,7 +4047,7 @@ OP_m1_STA_SRIndirectIndY:
 	STA_8
 	
 @ --- STP ---------------------------------------------------------------------
-@ I don't think it should be implemented this way, but hey, is it even used
+@ I don`t think it should be implemented this way, but hey, is it even used
 @ at all in first place?
 
 OP_STP:

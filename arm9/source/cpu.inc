@@ -84,3 +84,8 @@ memoryMap		.req r4		@ pointer to the memory map table
 .byte 0
 .align 4
 .endm
+
+#define	EXPORT(func) \
+		.global func;\
+		.type func,% function;\
+		func:

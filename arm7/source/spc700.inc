@@ -51,3 +51,8 @@ memory			.req r4		@ pointer to the memory
 .equ flagNVH,   0xC8
 .equ flagNVHZ,  0xCA
 .equ flagZC,    0x03
+
+#define	EXPORT(func) \
+		.global func;\
+		.type func,% function;\
+		func:

@@ -17,7 +17,7 @@
 */
 
 #include <nds.h>
-
+#define asm(x)
 #include "memory.h"
 
 

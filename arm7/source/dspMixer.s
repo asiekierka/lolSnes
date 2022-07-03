@@ -38,8 +38,8 @@
 brrHash:
 .word 0
 
-.GLOBAL DecodeSampleBlockAsm
-DecodeSampleBlockAsm:
+@//.GLOBAL DecodeSampleBlockAsm
+EXPORT(DecodeSampleBlockAsm)
     stmfd sp!, {r4-r12,r14}
 
     @ Save the channel pointer
@@ -383,7 +383,7 @@ bool echoEnabled;       79
 
 .GLOBAL DspMixSamplesStereo
 .FUNC DspMixSamplesStereo
-DspMixSamplesStereo:
+EXPORT(DspMixSamplesStereo)
     stmfd sp!, {r4-r12, lr}
 
     mov r3, #0
@@ -423,7 +423,7 @@ channelLoopback:
     @ Save the start position of the mix buffer & echo buffer
     stmfd sp!, {r1,r2}
 
-/*    @ Get echo enabled, then replace the opcode there if it's enabled
+/*    @ Get echo enabled, then replace the opcode there if it`s enabled
     ldrb r14, [r0, #ECHOENABLED_OFFSET]
     cmp r14, #1
     ldr r3, =0x01A00000 @ mov r0, r0
@@ -455,11 +455,11 @@ mixLoopback:
 .word envStateDecay
 .word envStateSustain
 .word envStateRelease
-.word noEnvelopeUpdate      @ Actually direct, but we don't need to do anything
+.word noEnvelopeUpdate      @ Actually direct, but we don`t need to do anything
 .word envStateIncrease
 .word envStateBentline
 .word envStateDecrease
-.word envStateSustain       @ Actually decrease exponential, but it's the same code
+.word envStateSustain       @ Actually decrease exponential, but it`s the same code
 
 #define ENVX_SHIFT 8
 #define ENVX_MAX 0x7f00
@@ -596,9 +596,9 @@ noEnvelopeUpdate:
     beq nextChannel
 
 noSampleUpdate:
-    @ This is really a >> 12 then << 1, but since samplePos bit 0 will never be set, it's safe.
+    @ This is really a >> 12 then << 1, but since samplePos bit 0 will never be set, it`s safe.
     @ Must ensure that sampleSpeed bit 0 is never set, and samplePos is never set to anything but 0
-    @ TODO - The speed up hack doesn't work.  Find out why
+    @ TODO - The speed up hack doesn`t work.  Find out why
     mov r12, SAMPLE_POS, lsr #12
     add r12, r0, r12, lsl #1
     ldrsh r8, [r12, #DECODED_OFFSET]
