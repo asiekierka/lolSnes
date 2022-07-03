@@ -351,7 +351,7 @@ ITCM_CODE void report_unk_lol(u32 op, u32 pc)
 }
 
 
-inline u8 IO_ReadKeysLow()
+static inline u8 IO_ReadKeysLow()
 {
 	u16 keys = *(u16*)0x04000130;
 	u8 keys2 = IPC->Input_XY;
@@ -365,7 +365,7 @@ inline u8 IO_ReadKeysLow()
 	return ret;
 }
 
-inline u8 IO_ReadKeysHigh()
+static inline u8 IO_ReadKeysHigh()
 {
 	u16 keys = *(u16*)0x04000130;
 	u8 keys2 = IPC->Input_XY;

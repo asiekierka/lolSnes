@@ -1,10 +1,41 @@
-/snes
-/lolSnes.pnps
-/lolSnes.prj
-/*.nds
-/lolSnes.pnproj
-/nitrofiles/snes
-/arm7/*.elf
-/arm9/*.elf
-/arm9/build
-/arm7/build
+# gitignore for NDS develop
+
+# visual studio
+!.vs/
+.vs/*
+!.vs/tasks.vs.json
+!.vs/launch.vs.json
+!.vs/ProjectSettings.json
+
+# objects
+build/
+Backup*/
+
+# nds excutables
+*.elf
+*.nds
+*.gba
+*.arm7
+*.arm9
+
+# linked directory
+_*/
+
+# etc
+*.db
+*.sqlite
+
+#vs
+Debug/
+Release/
+x64/
+ARM64/
+*.ipch
+*.obj
+
+#ida
+*.idb
+*.id0
+*.id1
+*.nam
+*.til

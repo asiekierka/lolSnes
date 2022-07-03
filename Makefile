@@ -25,7 +25,7 @@ all: $(TARGET).nds
 
 #---------------------------------------------------------------------------------
 $(TARGET).nds	:	arm7/$(TARGET).elf arm9/$(TARGET).elf
-	ndstool	-c $(TARGET).nds -7 arm7/$(TARGET).elf -9 arm9/$(TARGET).elf -b lolsnes.bmp "lolSnes;SNES emulator;StapleButter, RocketRobz"
+	ndstool	-c $(TARGET).nds -7 arm7/$(TARGET).arm7.elf -9 arm9/$(TARGET).arm9.elf -b lolsnes.bmp "lolSnes;SNES emulator;StapleButter, RocketRobz"
 
 #---------------------------------------------------------------------------------
 arm7/$(TARGET).elf:

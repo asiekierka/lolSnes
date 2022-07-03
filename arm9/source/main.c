@@ -108,9 +108,11 @@ bool isGoodFile(struct dirent* entry)
 	return true;
 }
 
+#define ROMDIR	"/EMU-ROMS/SNES-ROMS/"
+
 void makeROMList()
 {
-	DIR* romdir = opendir("/roms/snes/");
+	DIR* romdir = opendir(ROMDIR);
 	int i = 0;
 	if (romdir)
 	{
@@ -349,8 +351,8 @@ int main(int argc, char* argv[])
 			}
 			else if ((keypress & 0x0003) != 0x0003) // A/B
 			{
-				strncpy(fullpath, "/roms/snes/", 11);
-				strncpy(fullpath + 11, &filelist[menusel << 8], 256);
+				strncpy(fullpath, ROMDIR, sizeof(ROMDIR));
+				strncpy(fullpath + sizeof(ROMDIR)-1, &filelist[menusel << 8], 256);
 				
 				if (!Mem_LoadROM(fullpath))
 				{

@@ -592,7 +592,7 @@ void PPU_ResetLineChanges()
 	//iprintf("reset vbl changes\n");
 }
 
-inline void PPU_DoLineChanges(u32 line)
+static inline void PPU_DoLineChanges(u32 line)
 {
 	int i;
 	register u8 limit = PPU_NumLineChanges[line];
@@ -1249,7 +1249,7 @@ void PPU_ModeChange(u8 newmode)
 }
 
 
-inline void PPU_SetXScroll(int nbg, u8 val, void (*func)(u32))
+static inline void PPU_SetXScroll(int nbg, u8 val, void (*func)(u32))
 {
 	u32 m7stuff = 0;
 	
@@ -1273,7 +1273,7 @@ inline void PPU_SetXScroll(int nbg, u8 val, void (*func)(u32))
 	PPU_ScheduleLineChange(func, bg->ScrollX | (m7stuff << 16));
 }
 
-inline void PPU_SetYScroll(int nbg, u8 val, void (*func)(u32))
+static inline void PPU_SetYScroll(int nbg, u8 val, void (*func)(u32))
 {
 	u32 m7stuff = 0;
 	
@@ -1297,7 +1297,7 @@ inline void PPU_SetYScroll(int nbg, u8 val, void (*func)(u32))
 	PPU_ScheduleLineChange(func, bg->ScrollY | (m7stuff << 16));
 }
 
-inline void PPU_SetBGSCR(int nbg, u8 val)
+static inline void PPU_SetBGSCR(int nbg, u8 val)
 {
 	PPU_Background* bg = &PPU_BG[nbg];
 	
@@ -1336,7 +1336,7 @@ inline void PPU_SetBGSCR(int nbg, u8 val)
 	}
 }
 
-inline void PPU_SetBGCHR(int nbg, u8 val)
+static inline void PPU_SetBGCHR(int nbg, u8 val)
 {
 	PPU_Background* bg = &PPU_BG[nbg];
 	
@@ -1582,7 +1582,7 @@ void PPU_UpdateVRAM_Mode7(u32 addr, u16 val)
 	}
 }
 
-inline void PPU_UpdateVRAM(u32 addr, u16 oldval, u16 val)
+static inline void PPU_UpdateVRAM(u32 addr, u16 oldval, u16 val)
 {
 	PPU_VRAMBlock* block = &PPU_VRAMMap[addr >> 11];
 	

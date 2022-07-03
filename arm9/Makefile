@@ -23,7 +23,7 @@ DATA		:=
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-ARCH	:=	#-mthumb -mthumb-interwork
+ARCH	:=	#-marm -mthumb-interwork
 
 CFLAGS	:=	-g -Wall -O3\
  			-march=armv5te -mtune=arm946e-s -fomit-frame-pointer\
@@ -55,7 +55,7 @@ LIBDIRS	:=	$(LIBNDS)
 ifneq ($(BUILD),$(notdir $(CURDIR)))
 #---------------------------------------------------------------------------------
  
-export ARM9ELF	:=	$(CURDIR)/$(TARGET).elf
+export ARM9ELF	:=	$(CURDIR)/$(TARGET).arm9.elf
 export DEPSDIR := $(CURDIR)/$(BUILD)
 
 export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
@@ -99,7 +99,7 @@ $(BUILD):
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
-	@rm -fr $(BUILD) *.elf *.nds* *.bin 
+	@rm -fr $(BUILD) *.nds* *.bin #*.elf  
  
  
 #---------------------------------------------------------------------------------
