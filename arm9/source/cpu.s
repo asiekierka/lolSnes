@@ -80,7 +80,9 @@ mr8_1:
 	b Mem_ROMRead8
 
 .macro MemRead8
+	stmfd	sp!,{r1,r2,r3,r12}	
 	bl _MemRead8
+	ldmfd	sp!,{r1,r2,r3,r12}	
 .endm
 
 _MemRead16:
@@ -112,7 +114,9 @@ mr16_1:
 	b Mem_ROMRead16
 
 .macro MemRead16
+	stmfd	sp!,{r1,r2,r3,r12}	
 	bl _MemRead16
+	ldmfd	sp!,{r1,r2,r3,r12}	
 .endm
 
 _MemRead24:
@@ -140,7 +144,9 @@ _MemRead24:
 	bx lr
 
 .macro MemRead24
+	stmfd	sp!,{r1,r2,r3,r12}	
 	bl _MemRead24
+	ldmfd	sp!,{r1,r2,r3,r12}	
 .endm
 
 _MemWrite8:
@@ -165,7 +171,10 @@ _MemWrite8:
 	bx lr
 
 .macro MemWrite8
+	stmfd	sp!,{r2,r3,r12}	
 	bl _MemWrite8
+	ldmfd	sp!,{r2,r3,r12}	
+
 .endm
 
 _MemWrite16:
@@ -193,7 +202,9 @@ _MemWrite16:
 	bx lr
 
 .macro MemWrite16
+	stmfd	sp!,{r2,r3,r12}	
 	bl _MemWrite16
+	ldmfd	sp!,{r2,r3,r12}	
 .endm
 
 @ --- Stack read/write --------------------------------------------------------

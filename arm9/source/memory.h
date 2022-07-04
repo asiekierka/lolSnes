@@ -25,7 +25,7 @@
 #include "../../common/ipc.h"
 
 #define ROMCACHE_SIZE 32
-
+#define asm(x)
 typedef struct
 {
 	u32 SRAMMask;	// -0xC
