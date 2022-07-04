@@ -18,7 +18,7 @@
 
 @ --- Register aliases --------------------------------------------------------
 
-snesA 			.req r12
+snesA 			.req r4
 snesX			.req r11
 snesY			.req r10
 snesS			.req r9		@ high hword: S
@@ -30,7 +30,7 @@ snesP			.req r7		@ low hword: P
 snesCycles		.req r6		@ high hword: master cycle count
 snesLines		.req r6		@ low hword: scanline count (0-261)
 opTable			.req r5		@ pointer to the opcode table in use
-memoryMap		.req r4		@ pointer to the memory map table
+memoryMap		.req r12	@ pointer to the memory map table
 
 @ --- Variables and whatever --------------------------------------------------
 
