@@ -34,13 +34,13 @@
 #define ITER_LEFT r9
 #define CONST_F r10
 
-.GLOBAL brrHash
+@#.GLOBAL brrHash
 brrHash:
 .word 0
 
-@//.GLOBAL DecodeSampleBlockAsm
+@#.GLOBAL DecodeSampleBlockAsm
 EXPORT(DecodeSampleBlockAsm)
-    stmfd sp!, {r4-r12,r14}
+    stmfd sp!, {r4-r11,lr}
 
     @ Save the channel pointer
     mov r14, r2
@@ -285,7 +285,7 @@ doneDecodeCached:
     strh PREV1, [r14, #64]
 	@strh PREV0, [r14, #22]
 
-    ldmfd sp!, {r4-r12,r14}
+    ldmfd sp!, {r4-r11,lr}     @#doneDecode
     bx lr
 
 // Envelope state definitions
@@ -384,7 +384,7 @@ bool echoEnabled;       79
 .GLOBAL DspMixSamplesStereo
 .FUNC DspMixSamplesStereo
 EXPORT(DspMixSamplesStereo)
-    stmfd sp!, {r4-r12, lr}
+    stmfd sp!, {r4-r11, lr}
 
     mov r3, #0
     strb r3, channelNum
@@ -752,7 +752,7 @@ mixClipLoop:
     bne mixClipLoop
 
 doneMix:
-    ldmfd sp!, {r4-r12, lr}
+    ldmfd sp!, {r4-r11, lr}     @#doneMix
     bx lr
 .ENDFUNC
 

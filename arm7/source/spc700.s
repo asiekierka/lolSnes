@@ -86,7 +86,10 @@ SPC_UpdateMemMap:
 	.ifnc \addr, r0
 		mov r0, \addr
 	.endif
+	@stmfd	sp!,{r1,r2,r3}
 	bl SPC_IORead8
+	@ldmfd	sp!,{r1,r2,r3}
+
 1:
 .endm
 
@@ -284,7 +287,7 @@ itercount:
 	.long 0
 
 EXPORT(SPC_Reset)
-	stmdb sp!, {r3-r11, lr}
+	stmdb sp!, {r4-r11, lr}
 
 	bl SPC_InitMisc
 	
@@ -308,7 +311,7 @@ EXPORT(SPC_Reset)
 	mov r1, #0
 	str r1, [r0]
 	
-	ldmia sp!, {r3-r11, lr}
+	ldmia sp!, {r4-r11, lr}
 	bx lr
 	
 @ --- Main loop ---------------------------------------------------------------

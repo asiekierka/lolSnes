@@ -24,7 +24,8 @@
 @ r1: right buffer
 @ size should be a multiple of 16
 
-.global zerofillBuffers
+	.global zerofillBuffers
+	.type zerofillBuffers,% function;\
 zerofillBuffers:
 	stmdb sp!, {r4-r5, lr}
 	mov r2, #0

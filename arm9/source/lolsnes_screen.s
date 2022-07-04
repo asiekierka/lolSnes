@@ -10,7 +10,7 @@
 @	Total size: 512 + 21888 + 1536 = 23936
 @
 @	Time-stamp: 2013-12-17, 00:59:22
-@	Exported by Cearn's GBA Image Transmogrifier, v0.8.10
+@	Exported by Cearn`s GBA Image Transmogrifier, v0.8.10
 @	( http://www.coranac.com/projects/#grit )
 @
 @=======================================================================
