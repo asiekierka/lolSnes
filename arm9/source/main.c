@@ -109,11 +109,9 @@ bool isGoodFile(struct dirent* entry)
 	return true;
 }
 
-#define ROMDIR	"/EMU-ROMS/SNES-ROMS/"
-
 void makeROMList()
 {
-	DIR* romdir = opendir(ROMDIR);
+	DIR* romdir = opendir(".");
 	int i = 0;
 	if (romdir)
 	{
@@ -299,16 +297,14 @@ int main(int argc, char* argv[])
 		iprintf("FAT init failed\n");
 		return -1;
 	}
-	
-	makeROMList();
-	
-	makeMenu();
 
-	iprintf("lolSnes " VERSION ", by StapleButter\n");
-	iprintf("Improved by RocketRobz\n");
-	
-	if (argc >= 2) {
-        char* filename = argv[1];
+#ifndef NITROFS_ROM
+	chdir("/roms/snes/");
+#endif
+	iprintf("lolSnes " VERSION "\nOriginally by StapleButter\n");
+
+	if (argc > 1) {
+      		char* filename = argv[1];
 
 		if (!Mem_LoadROM(filename))
 		{
@@ -331,8 +327,11 @@ int main(int argc, char* argv[])
 
 		swiWaitForVBlank();
 		CPU_Run();
-    }
-    else for (;;)
+	} else {
+	makeROMList();
+	makeMenu();
+
+    	for (;;)
 	{
 		if (keypress != 0x03FF)
 		{
@@ -352,10 +351,7 @@ int main(int argc, char* argv[])
 			}
 			else if ((keypress & 0x0003) != 0x0003) // A/B
 			{
-				strncpy(fullpath, ROMDIR, sizeof(ROMDIR));
-				strncpy(fullpath + sizeof(ROMDIR)-1, &filelist[menusel << 8], 256);
-				
-				if (!Mem_LoadROM(fullpath))
+				if (!Mem_LoadROM(&filelist[menusel << 8]))
 				{
 					iprintf("ROM loading failed\n");
 					continue;
@@ -382,6 +378,7 @@ int main(int argc, char* argv[])
 		}
 		
 		swiWaitForVBlank();
+	}
 	}
 
 	return 0;
