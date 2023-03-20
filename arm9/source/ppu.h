@@ -26,4 +26,7 @@ ITCM_CODE void PPU_SNESVBlank();
 ITCM_CODE void PPU_VBlank();
 ITCM_CODE void PPU_HBlank();
 
+u8 PPU_Read8(u32 addr);
+void PPU_Write8(u32 addr, u8 val);
+
 #endif

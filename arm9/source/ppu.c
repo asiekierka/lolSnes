@@ -245,7 +245,7 @@ void PPU_SetOBJCHR(u16 base, u16 gap);
 ITCM_CODE void PPU_SetM7ScrollX(u32 val);
 ITCM_CODE void PPU_SetM7ScrollY(u32 val);
 
-
+void PPU_ModeChange(u8 newmode);
 
 void PPU_Reset()
 {
@@ -418,8 +418,8 @@ void PPU_Reset()
 	PPU_ModeChange(0);
 	
 	
-	iprintf("VRAM   %08X | Map   %08X", (u32)&PPU_VRAM, (u32)&PPU_VRAMMap);
-	iprintf("Htiles %08X | OAM   %08X", (u32)&PPU_HighPrioTiles, (u32)&PPU_OAM);
+	printf("VRAM   %08X | Map   %08X", (u32)&PPU_VRAM, (u32)&PPU_VRAMMap);
+	printf("Htiles %08X | OAM   %08X", (u32)&PPU_HighPrioTiles, (u32)&PPU_OAM);
 }
 
 
@@ -552,7 +552,7 @@ void PPU_ScheduleLineChange(void (*action)(u32), u32 data)
 	{
 		PPU_VBlankChangesDirty = 0;
 		PPU_NumLineChanges[192] = 0;
-		//iprintf("reset vbl changes due to lag\n");
+		//printf("reset vbl changes due to lag\n");
 	}
 	
 	// if the change occured too late, apply it now, and 
@@ -590,7 +590,7 @@ void PPU_ResetLineChanges()
 	for (i = 0; i < 192; i += 4)
 		*(u32*)&PPU_NumLineChanges[i] = 0;
 	PPU_NumLineChanges[192] = 0;
-	//iprintf("reset vbl changes\n");
+	//printf("reset vbl changes\n");
 }
 
 static inline void PPU_DoLineChanges(u32 line)
@@ -598,7 +598,7 @@ static inline void PPU_DoLineChanges(u32 line)
 	int i;
 	register u8 limit = PPU_NumLineChanges[line];
 	register PPU_LineChange* change = &PPU_LineChanges[line][0];
-	//if (line==192 && limit>0) iprintf("%d vbl changes \n", limit);
+	//if (line==192 && limit>0) printf("%d vbl changes \n", limit);
 	for (i = 0; i < limit; i++)
 	{
 		(*(change->Action))(change->Data);
@@ -1193,7 +1193,7 @@ void PPU_SetupBG(int nbg, int depth, u16 mappaloffset)
 void PPU_ModeChange(u8 newmode)
 {
 	PPU_LastNon7Mode = newmode;
-	iprintf("[%03d] PPU mode %d\n", *(vu16*)0x04000006, newmode);
+	printf("[%03d] PPU mode %d\n", *(vu16*)0x04000006, newmode);
 	switch (newmode)
 	{
 		case 0:
@@ -1804,7 +1804,7 @@ void PPU_Write8(u32 addr, u8 val)
 				u16 base = (val & 0x07) << 14;
 				u16 gap = (val & 0x18) << 10;
 				PPU_SetOBJCHR(base, gap);
-				//iprintf("OBJ base:%08X gap:%08X | %08X\n", base, gap, (u32)&PPU_VRAM + base);
+				//printf("OBJ base:%08X gap:%08X | %08X\n", base, gap, (u32)&PPU_VRAM + base);
 			}
 			break;
 			
@@ -1866,7 +1866,7 @@ void PPU_Write8(u32 addr, u8 val)
 					break;
 				}
 			}
-			if (val & 0xF0) iprintf("!! 16x16 TILES NOT SUPPORTED\n");
+			if (val & 0xF0) printf("!! 16x16 TILES NOT SUPPORTED\n");
 			PPU_ScheduleLineChange(PPU_SetBG3Prio, val);
 			break;
 			
@@ -1920,7 +1920,7 @@ void PPU_Write8(u32 addr, u8 val)
 			
 		
 		case 0x15:
-			if ((val & 0x7C) != 0x00) iprintf("UNSUPPORTED VRAM MODE %02X\n", val);
+			if ((val & 0x7C) != 0x00) printf("UNSUPPORTED VRAM MODE %02X\n", val);
 			PPU_VRAMInc = val;
 			switch (val & 0x03)
 			{
@@ -2057,10 +2057,10 @@ void PPU_Write8(u32 addr, u8 val)
 			break;
 			
 		case 0x33: // SETINI
-			if (val & 0x80) iprintf("!! PPU EXT SYNC\n");
-			if (val & 0x40) iprintf("!! MODE7 EXTBG\n");
-			if (val & 0x08) iprintf("!! PSEUDO HIRES\n");
-			if (val & 0x02) iprintf("!! SMALL SPRITES\n");
+			if (val & 0x80) printf("!! PPU EXT SYNC\n");
+			if (val & 0x40) printf("!! MODE7 EXTBG\n");
+			if (val & 0x08) printf("!! PSEUDO HIRES\n");
+			if (val & 0x02) printf("!! SMALL SPRITES\n");
 			break;
 			
 		case 0x40: IPC->SPC_IOPorts[0] = val; break;
@@ -2074,7 +2074,7 @@ void PPU_Write8(u32 addr, u8 val)
 		case 0x83: Mem_WRAMAddr = (Mem_WRAMAddr & 0x0000FFFF) | ((val & 0x01) << 16); break;
 				
 		default:
-			//iprintf("PPU_Write8(%08X, %08X)\n", addr, val);
+			//printf("PPU_Write8(%08X, %08X)\n", addr, val);
 			break;
 	}
 	
@@ -2098,7 +2098,7 @@ void PPU_Write16(u32 addr, u16 val)
 		case 0x41: IPC->SPC_IOPorts[1] = val & 0xFF; IPC->SPC_IOPorts[2] = val >> 8; break;
 		case 0x42: *(u16*)&IPC->SPC_IOPorts[2] = val; break;
 		
-		case 0x43: iprintf("!! write $21%02X %04X\n", addr, val); break;
+		case 0x43: printf("!! write $21%02X %04X\n", addr, val); break;
 		
 		case 0x81: Mem_WRAMAddr = (Mem_WRAMAddr & 0x00010000) | val; break;
 		
@@ -2128,13 +2128,13 @@ ITCM_CODE void PPU_VBlank()
 	// (especially master brightness)
 	if (PPU_VCount < 262)
 	{
-		//iprintf("VBlank [miss]\n");
+		//printf("VBlank [miss]\n");
 		PPU_MissedVBlank = true;
 		PPU_DoLineChanges(192);
 		return;
 	}
 	
-	//iprintf("VBlank\n");
+	//printf("VBlank\n");
 	PPU_MissedVBlank = false;
 	
 	*(u16*)0x0400006C = PPU_MasterBright;
@@ -2265,7 +2265,7 @@ ITCM_CODE void PPU_HBlank()
 		*(vs16*)0x04000026 = PPU_M7D;
 		*(vs32*)0x04000028 = (PPU_M7RefX << 8) + (PPU_M7A * (-PPU_M7RefX + xscroll)) + (PPU_M7B * (-PPU_M7RefY + yscroll + yoffset));
 		*(vs32*)0x0400002C = (PPU_M7RefY << 8) + (PPU_M7C * (-PPU_M7RefX + xscroll)) + (PPU_M7D * (-PPU_M7RefY + yscroll + yoffset));
-		//iprintf("[%03d] mode7 %04X|%04X %04X|%04X %04X|%04X|%04X|%04X\n",
+		//printf("[%03d] mode7 %04X|%04X %04X|%04X %04X|%04X|%04X|%04X\n",
 		//	yoffset, xscroll, yscroll, PPU_M7RefX, PPU_M7RefY, PPU_M7A, PPU_M7B, PPU_M7C, PPU_M7D);
 	}
 	

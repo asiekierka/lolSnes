@@ -77,6 +77,7 @@ extern u16 Mem_HCheck;
 
 void ROM_DoCacheBank(u32 bank, u32 type);
 void ROM_SpeedChanged();
+void ROM_SetupCache();
 
 bool Mem_LoadROM(char* path);
 void Mem_Reset();

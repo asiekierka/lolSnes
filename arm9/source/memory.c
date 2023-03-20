@@ -98,7 +98,7 @@ bool ROM_CheckHeader(u32 offset)
 
 void reportBRK(u32 pc)
 {
-	iprintf("BRK @ %02X:%04X | %08X\n", pc>>16, pc&0xFFFF, MEM_PTR(pc>>16, pc&0xFFFF));
+	printf("BRK @ %02X:%04X | %08X\n", pc>>16, pc&0xFFFF, MEM_PTR(pc>>16, pc&0xFFFF));
 	for(;;);
 }
 
@@ -121,28 +121,28 @@ bool Mem_LoadROM(char* path)
 		ROM_BaseOffset = 0x200;
 		Mem_HiROM = false;
 		ROM_HeaderOffset = 0x81C0;
-		iprintf("ROM type: headered LoROM\n");
+		printf("ROM type: headered LoROM\n");
 	}
 	else if (ROM_CheckHeader(0x101C0)) // headered, HiROM
 	{
 		ROM_BaseOffset = 0x200;
 		Mem_HiROM = true;
 		ROM_HeaderOffset = 0x101C0;
-		iprintf("ROM type: headered HiROM\n");
+		printf("ROM type: headered HiROM\n");
 	}
 	else if (ROM_CheckHeader(0x7FC0) || ROM_FileSize == 0x8000) // headerless, LoROM
 	{
 		ROM_BaseOffset = 0;
 		Mem_HiROM = false;
 		ROM_HeaderOffset = 0x7FC0;
-		iprintf("ROM type: headerless LoROM\n");
+		printf("ROM type: headerless LoROM\n");
 	}
 	else if (ROM_CheckHeader(0xFFC0)) // headerless, HiROM
 	{
 		ROM_BaseOffset = 0;
 		Mem_HiROM = true;
 		ROM_HeaderOffset = 0xFFC0;
-		iprintf("ROM type: headerless HiROM\n");
+		printf("ROM type: headerless HiROM\n");
 	}
 	else // whatever piece of shit
 	{
@@ -154,7 +154,7 @@ bool Mem_LoadROM(char* path)
 		ROM_BaseOffset = 0x200;
 		Mem_HiROM = false;
 		ROM_HeaderOffset = 0x81C0;
-		iprintf("ROM type: not found, assuming headered LoROM\n");
+		printf("ROM type: not found, assuming headered LoROM\n");
 	}
 
 	fseek(ROM_File, ROM_HeaderOffset + 0x18, SEEK_SET);
@@ -168,7 +168,7 @@ bool Mem_LoadROM(char* path)
 	
 	Mem_SRAMMask = sramsize ? ((1024 << sramsize) - 1) : 0;
 	Mem_SRAMMask &= 0x000FFFFF;
-	iprintf("SRAM size: %dKB\n", (Mem_SRAMMask+1) >> 10);
+	printf("SRAM size: %dKB\n", (Mem_SRAMMask+1) >> 10);
 	
 	if (Mem_SRAMMask)
 	{
@@ -292,7 +292,7 @@ void Mem_Reset()
 	
 	ROM_SetupCache();
 	
-	iprintf("sysram = %08X\n", &Mem_SysRAM[0]);
+	printf("sysram = %08X\n", &Mem_SysRAM[0]);
 	
 	// get uncached address
 	u32 ipcsize = (sizeof(IPCStruct) + 0x1F) & ~0x1F;
@@ -300,7 +300,7 @@ void Mem_Reset()
 	DC_InvalidateRange(IPC, ipcsize);
 	IPC = memUncached(IPC);
 	IPC->Pause = 0;
-	iprintf("IPC struct = %08X\n", IPC);
+	printf("IPC struct = %08X\n", IPC);
 	fifoSendValue32(FIFO_USER_01, 3);
 	fifoSendAddress(FIFO_USER_01, memCached(IPC));
 	
@@ -326,7 +326,7 @@ void Mem_SaveSRAM()
 	Mem_SRAMFile = fopen(Mem_SRAMPath, "r+");
 	if (Mem_SRAMFile)
 	{
-		iprintf("SRAM save\n");
+		printf("SRAM save\n");
 		Mem_Status->SRAMDirty = 0;
 		fseek(Mem_SRAMFile, 0, SEEK_SET);
 		fwrite(Mem_SRAM, Mem_SRAMMask+1, 1, Mem_SRAMFile);
@@ -611,7 +611,7 @@ u16 Mem_JoyRead16(u32 addr)
 	
 	u16 ret = 0;
 	
-	//iprintf("joy read16 40%02X\n", addr);
+	//printf("joy read16 40%02X\n", addr);
 	
 	asm("ldmia sp!, {r12}");
 	return ret;

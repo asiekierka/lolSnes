@@ -68,7 +68,7 @@ void ROM_ApplySpeedHacks(int banknum, u8* bank)
 			bank[i+2] = 0x42;
 			bank[i+3] = (bank[i+3] & 0x0F) | (branchtype & 0xF0);
 			
-			//iprintf("Speed hack installed @ %02X:%04X\n", banknum, (Mem_HiROM?0:0x8000)+i);
+			//printf("Speed hack installed @ %02X:%04X\n", banknum, (Mem_HiROM?0:0x8000)+i);
 			
 			i += 4;
 		}
@@ -82,7 +82,7 @@ void ROM_ApplySpeedHacks(int banknum, u8* bank)
 				bank[i+3] = 0x42;
 				bank[i+4] = (bank[i+4] & 0x0F) | (branchtype & 0xF0);
 				
-				//iprintf("Speed hack installed @ %02X:%04X\n", banknum, (Mem_HiROM?0:0x8000)+i);
+				//printf("Speed hack installed @ %02X:%04X\n", banknum, (Mem_HiROM?0:0x8000)+i);
 			}
 			
 			i += 5;
@@ -264,7 +264,7 @@ void ROM_CacheBank(u32 bank, u32 type)
 	bank &= (ROM_NumBanks - 1);
 	if (Mem_HiROM && bank < 0x40) bank += 0x40;
 	
-	//iprintf("cache bank %02X %02X %02X\n", bank, type, ROM_BankStatus[bank]);
+	//printf("cache bank %02X %02X %02X\n", bank, type, ROM_BankStatus[bank]);
 	/*int i;
 	for (i = 0; i < 400; i++)
 	{
@@ -349,7 +349,7 @@ void ROM_SpeedChanged()
 	
 	if (Mem_FastROM)
 	{
-		iprintf("Fast ROM\n");
+		printf("Fast ROM\n");
 		
 		for (b = 0x80; b < 0xC0; b++)
 			for (a = 0x8000; a < 0x10000; a += 0x2000)
@@ -361,7 +361,7 @@ void ROM_SpeedChanged()
 	}
 	else
 	{
-		iprintf("Slow ROM\n");
+		printf("Slow ROM\n");
 		
 		for (b = 0x80; b < 0xC0; b++)
 			for (a = 0x8000; a < 0x10000; a += 0x2000)
@@ -392,11 +392,11 @@ void ROM_SetupCache()
 	// TODO higher limit for DSi mode (whole ROM can fit in RAM)
 	if (ROM_BufferSize > 0x200000) ROM_BufferSize = 0x200000;
 	
-	iprintf("ROM buffer size: %dKB\n", ROM_BufferSize >> 10);
+	printf("ROM buffer size: %dKB\n", ROM_BufferSize >> 10);
 	ROM_Buffer = (u8*)malloc(ROM_BufferSize);
 	if (!ROM_Buffer)
 	{
-		iprintf("Allocation failed\n");
+		printf("Allocation failed\n");
 		for(;;);
 	}
 	

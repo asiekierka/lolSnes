@@ -15,8 +15,6 @@ Backup*/
 *.elf
 *.nds
 *.gba
-*.arm7
-*.arm9
 
 # linked directory
 _*/

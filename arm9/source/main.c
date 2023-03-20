@@ -67,7 +67,7 @@ bool running = false;
 
 void arm7print(u32 value32, void* userdata)
 {
-	iprintf(IPC->Dbg_String);
+	printf(IPC->Dbg_String);
 }
 
 
@@ -117,7 +117,7 @@ void makeROMList()
 	{
 		struct dirent* entry;
 		
-		while (entry = readdir(romdir))
+		while ((entry = readdir(romdir)))
 		{
 			if (!isGoodFile(entry)) continue;
 			i++;
@@ -128,7 +128,7 @@ void makeROMList()
 		filelist = (char*)malloc(i * 256);
 		nfiles = i;
 		i = 0;
-		while (entry = readdir(romdir))
+		while ((entry = readdir(romdir)))
 		{
 			if (!isGoodFile(entry)) continue;
 			strncpy(&filelist[i << 8], entry->d_name, 255);
@@ -205,10 +205,8 @@ void menuPrint(int x, int y, char* str)
 	
 	menu += (y << 5) + x;
 	
-	for (i = 0; str[i] != '\0'; i++)
-	{
-		menu[i] = 0xF000 | str[i];
-	}
+	while(*str != '\0')
+		*(menu++) = 0xF000 | (*(str++) - 32);
 }
 
 void makeMenu()
@@ -227,18 +225,18 @@ void makeMenu()
 		menuPrint(0, 2+i, "                                ");
 		menuPrint(2, 2+i, &filelist[(menuscroll+i) << 8]);
 		if ((menuscroll+i) == menusel)
-			menuPrint(0, 2+i, "\x10");
+			menuPrint(0, 2+i, ">");
 	}
 	
-	menuPrint(31, 2, "\x1E");
-	menuPrint(31, 23, "\x1F");
+	menuPrint(31, 2, "^");
+	menuPrint(31, 23, "v");
 	for (i = 3; i < 23; i++)
 		menuPrint(31, i, "|");
 		
 	if ((nfiles - menuscroll) <= 22)
-		menuPrint(31, 22, "\x08");
+		menuPrint(31, 22, "#");
 	else
-		menuPrint(31, 3 + ((menuscroll * 20) / (nfiles - 22)), "\x08");
+		menuPrint(31, 3 + ((menuscroll * 20) / (nfiles - 22)), "#");
 		
 	setMenuSel(2 + menusel - menuscroll);
 }
@@ -248,17 +246,13 @@ char fullpath[270];
 
 int main(int argc, char* argv[])
 {
-	int i;
-	
 	defaultExceptionHandler();
-	
-	irqEnable(IRQ_VBLANK);
-	irqEnable(IRQ_HBLANK);
-	
+
 	irqSet(IRQ_VBLANK, vblank_idle);
-	
+	irqEnable(IRQ_VBLANK);
+
 	fifoSetValue32Handler(FIFO_USER_02, arm7print, NULL);
-	
+
 	//vramSetBankA(VRAM_A_LCD);
 	videoSetMode(MODE_0_2D);
 	*(vu8*)0x04000240 = 0x81;
@@ -294,27 +288,28 @@ int main(int argc, char* argv[])
 #endif
 	{
 		toggleConsole(true);
-		iprintf("FAT init failed\n");
+		printf("FAT init failed\n");
 		return -1;
 	}
 
 #ifndef NITROFS_ROM
 	chdir("/roms/snes/");
 #endif
-	iprintf("lolSnes " VERSION "\nOriginally by StapleButter\n");
+	printf("lolSnes " VERSION "\nOriginally by StapleButter\n");
 
 	if (argc > 1) {
       		char* filename = argv[1];
 
 		if (!Mem_LoadROM(filename))
 		{
-			iprintf("ROM loading failed\n");
+			printf("ROM loading failed\n");
 			stop();
 		}
 
 		*(vu16*)0x04001000 &= 0xDFFF;
 		toggleConsole(true);
-		iprintf("ROM loaded, running\n");
+		printf("ROM loaded, running\n");
+		fflush(stdout);
 
 		CPU_Reset();
 		fifoSendValue32(FIFO_USER_01, 1);
@@ -324,6 +319,7 @@ int main(int argc, char* argv[])
 
 		irqSet(IRQ_VBLANK, vblank);
 		irqSet(IRQ_HBLANK, PPU_HBlank);
+		irqEnable(IRQ_HBLANK);
 
 		swiWaitForVBlank();
 		CPU_Run();
@@ -353,13 +349,13 @@ int main(int argc, char* argv[])
 			{
 				if (!Mem_LoadROM(&filelist[menusel << 8]))
 				{
-					iprintf("ROM loading failed\n");
+					printf("ROM loading failed\n");
 					continue;
 				}
 				
 				*(vu16*)0x04001000 &= 0xDFFF;
 				toggleConsole(true);
-				iprintf("ROM loaded, running\n");
+				printf("ROM loaded, running\n");
 
 				CPU_Reset();
 				fifoSendValue32(FIFO_USER_01, 1);
@@ -369,6 +365,7 @@ int main(int argc, char* argv[])
 				
 				irqSet(IRQ_VBLANK, vblank);
 				irqSet(IRQ_HBLANK, PPU_HBlank);
+				irqEnable(IRQ_HBLANK);
 
 				swiWaitForVBlank();
 				CPU_Run();
@@ -387,13 +384,13 @@ int main(int argc, char* argv[])
 void printvar()
 {
 	asm("stmdb sp!, {r12}");
-	//iprintf("printvar %04X\n", IPC->_debug);
+	//printf("printvar %04X\n", IPC->_debug);
 	asm("ldmia sp!, {r12}");
 }
 
 void printstuff(u32 foo, u32 bar, u32 blarg)
 {
 	asm("stmdb sp!, {r0-r3, r12}");
-	iprintf("printstuff %08X %08X %08X\n", foo, bar, blarg);
+	printf("printstuff %08X %08X %08X\n", foo, bar, blarg);
 	asm("ldmia sp!, {r0-r3, r12}");
 }

@@ -96,7 +96,7 @@ void DMA_Enable(u8 flag)
 		u32 membank = chan[4] << 16;
 		u16 bytecount = chan[5] | (chan[6] << 8);
 		
-		//iprintf("DMA%d %d %06X %s 21%02X | m:%d p:%d\n", c, bytecount, memaddr|membank, (params&0x80)?"<-":"->", ppuaddr, maddrinc, paddrinc);
+		//printf("DMA%d %d %06X %s 21%02X | m:%d p:%d\n", c, bytecount, memaddr|membank, (params&0x80)?"<-":"->", ppuaddr, maddrinc, paddrinc);
 		
 		if (params & 0x80)
 		{
